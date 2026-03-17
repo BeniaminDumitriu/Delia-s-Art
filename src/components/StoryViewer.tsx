@@ -11,8 +11,6 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
     const [currentScene, setCurrentScene] = useState<SceneState>('intro_1');
     const [canInteract, setCanInteract] = useState(false);
     const [holdProgress, setHoldProgress] = useState(0);
-    const [showLogoLoader, setShowLogoLoader] = useState(true);
-    const [needsUserStart, setNeedsUserStart] = useState(false);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const holdTimerRef = useRef<number | null>(null);
@@ -115,22 +113,13 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
         setCanInteract(false);
         setHoldProgress(0);
         cancelHold();
-        setShowLogoLoader(true);
-        setNeedsUserStart(false);
 
         if (videoRef.current) {
             videoRef.current.src = scenes[currentScene]?.src || '';
             videoRef.current.currentTime = 0;
-            videoRef.current.play().catch(() => setNeedsUserStart(true));
+            videoRef.current.play().catch(e => console.log('Autoplay prevented', e));
         }
     }, [currentScene]);
-
-    useEffect(() => {
-        const t = window.setTimeout(() => {
-            if (showLogoLoader) setNeedsUserStart(true);
-        }, 1800);
-        return () => window.clearTimeout(t);
-    }, [showLogoLoader]);
 
     // Video time updates and completion logic
     const handleTimeUpdate = () => {
@@ -158,17 +147,6 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
     if (currentScene === 'gallery') return null;
     const sceneInfo = scenes[currentScene];
 
-    const tryStart = async () => {
-        const video = videoRef.current;
-        if (!video) return;
-        try {
-            await video.play();
-            setNeedsUserStart(false);
-        } catch {
-            setNeedsUserStart(true);
-        }
-    };
-
     return (
         <div
             className="story-viewer"
@@ -187,23 +165,8 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
                 muted
                 playsInline
                 onTimeUpdate={handleTimeUpdate}
-                onLoadedData={() => setShowLogoLoader(true)}
-                onPlaying={() => {
-                    setShowLogoLoader(false);
-                    setNeedsUserStart(false);
-                }}
-                onError={() => setNeedsUserStart(true)}
                 onEnded={handleVideoEnded}
             />
-
-            {showLogoLoader && (
-                <div
-                    className={`video-logo-loader ${needsUserStart ? 'is-interactive' : ''}`}
-                    onClick={needsUserStart ? tryStart : undefined}
-                >
-                    <img src="/logo/1logo.jpg" alt="Delia’s Art" />
-                </div>
-            )}
 
             {/* Cinematic Text Overlay */}
             {sceneInfo.mapText && (
