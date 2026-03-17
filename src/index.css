@@ -124,3 +124,41 @@ a:focus-visible {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   pointer-events: none;
 }
+
+/* Video/logo loader (no "Loading" text) */
+.video-logo-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.video-logo-loader.is-interactive {
+  pointer-events: auto;
+}
+
+.video-logo-loader img {
+  width: min(320px, 70vw);
+  height: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.6));
+  animation: logoFade 1.8s ease-in-out infinite;
+}
+
+@keyframes logoFade {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.985);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.35;
+    transform: scale(0.985);
+  }
+}
