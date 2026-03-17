@@ -1,0 +1,50 @@
+.web-intro-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.web-intro-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video beautifully covers the whole desktop window */
+}
+
+.web-text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 6;
+    pointer-events: none;
+    width: 80%;
+}
+
+.skip-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+.skip-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #000;
+}
