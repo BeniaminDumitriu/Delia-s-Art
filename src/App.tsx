@@ -1,19 +1,22 @@
-import { useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { StoryViewer } from './components/StoryViewer';
-import { GallerySection } from './components/GallerySection';
+import { CollectionPage } from './pages/CollectionPage';
+import { ProductPage } from './pages/ProductPage';
 
 function App() {
-  const [showGallery, setShowGallery] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
-      {!showGallery && (
-        <StoryViewer onStoryComplete={() => setShowGallery(true)} />
-      )}
-
-      {showGallery && (
-        <GallerySection />
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={<StoryViewer onStoryComplete={() => navigate('/collection')} />}
+        />
+        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/products/:id" element={<ProductPage />} />
+        <Route path="*" element={<Navigate to="/collection" replace />} />
+      </Routes>
     </>
   );
 }

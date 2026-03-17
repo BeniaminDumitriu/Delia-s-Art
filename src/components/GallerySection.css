@@ -105,6 +105,7 @@
     padding: 20px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
     box-sizing: border-box;
+    z-index: 3;
 }
 
 .artwork-card-info h3 {
