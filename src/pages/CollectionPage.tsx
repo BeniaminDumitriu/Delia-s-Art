@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Artwork } from '../types';
 import { artworks } from '../data/artworks';
 import '../components/GallerySection.css';
+import './CollectionPage.css';
 
 function ArtworkCard({ artwork, onClick }: { artwork: Artwork; onClick: () => void }) {
   const [videoReady, setVideoReady] = useState(false);
@@ -36,6 +37,9 @@ export function CollectionPage() {
 
   return (
     <div className="gallery-section">
+      <div className="collection-brand" aria-hidden="true">
+        <img className="collection-logo" src="/logo/1logo.png" alt="Delia’s Art" />
+      </div>
       <header className="gallery-header">
         <h1>The Collection</h1>
         <p className="gallery-subtitle">Every painting carries a dream</p>
@@ -51,6 +55,17 @@ export function CollectionPage() {
           />
         ))}
       </div>
+
+      <footer className="collection-footer">
+        <div className="collection-footer-contact">
+          <a href="mailto:dumitriudelia99@gmail.com">dumitriudelia99@gmail.com</a>
+          <a href="tel:+40756376677">(0756) 376 677</a>
+        </div>
+
+        <img className="collection-footer-logo" src="/logo/1logo.png" alt="Delia’s Art" />
+
+        <div className="collection-footer-spacer" />
+      </footer>
     </div>
   );
 }
