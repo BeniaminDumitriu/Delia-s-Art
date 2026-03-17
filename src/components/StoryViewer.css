@@ -1,0 +1,100 @@
+.story-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    overflow: hidden;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.scene-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1s ease-in-out;
+}
+
+.scene-video.fade-in {
+    opacity: 1;
+}
+
+.scene-video.fade-out {
+    opacity: 0;
+}
+
+.secondary-video {
+    z-index: 2;
+    /* Put it above the fading out video */
+    opacity: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    /* Let clicks pass through to container */
+}
+
+.instruction-container {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+}
+
+.text-overlay-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    z-index: 6;
+    /* between UI overlay and video */
+    pointer-events: none;
+}
+
+.cinematic-text {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+}
+
+.instruction-container.visible {
+    opacity: 1;
+}
+
+.hold-indicator {
+    margin: 15px auto 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hold-indicator-fill {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform-origin: center;
+    transition: transform 0.1s linear, opacity 0.1s linear;
+}
