@@ -4,6 +4,7 @@ import { StoryViewer } from './components/StoryViewer';
 import { WebIntro } from './components/WebIntro';
 import { CollectionPage } from './pages/CollectionPage';
 import { ProductPage } from './pages/ProductPage';
+import { AboutPage } from './pages/AboutPage';
 
 function App() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -24,6 +25,7 @@ function App() {
         />
         <Route path="/collection" element={<CollectionPage />} />
         <Route path="/products/:id" element={<ProductPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/collection" replace />} />
       </Routes>
     </>

@@ -44,6 +44,12 @@ export function CollectionPage() {
         <h1>The Collection</h1>
         <p className="gallery-subtitle">Every painting carries a dream</p>
         <p>Tap a painting to explore its story.</p>
+        <button 
+          className="about-link-btn"
+          onClick={() => navigate('/about')}
+        >
+          About the Artist
+        </button>
       </header>
 
       <div className="gallery-grid">
@@ -59,7 +65,6 @@ export function CollectionPage() {
       <footer className="collection-footer">
         <div className="collection-footer-contact">
           <a href="mailto:dumitriudelia99@gmail.com">dumitriudelia99@gmail.com</a>
-          <a href="tel:+40756376677">(0756) 376 677</a>
         </div>
 
         <img className="collection-footer-logo" src="/logo/1logo.png" alt="Delia’s Art" />
