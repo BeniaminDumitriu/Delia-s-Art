@@ -11,8 +11,7 @@ export function ProductPage() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleClose = () => {
-    if (window.history.length > 1) navigate(-1);
-    else navigate('/collection');
+    navigate('/collection');
   };
 
   if (!artwork) {
