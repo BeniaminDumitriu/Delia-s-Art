@@ -9,7 +9,7 @@ export const artworks: Artwork[] = [
     size: 'Various',
     medium: 'Mixed Media',
     price: 'Inquire',
-    videoUrl: '/artPieces/1v.mp4',
+    videoUrl: 'https://res.cloudinary.com/der91doo8/video/upload/v1773833657/1v_fulsah.mp4',
     imageUrl: '/artPieces/1.jpg',
   },
   {
@@ -20,7 +20,7 @@ export const artworks: Artwork[] = [
     size: 'Various',
     medium: 'Mixed Media',
     price: 'Inquire',
-    videoUrl: '/artPieces/2v.mp4',
+    videoUrl: 'https://res.cloudinary.com/der91doo8/video/upload/v1773833658/2v_qqyn9y.mp4',
     imageUrl: '/artPieces/2.jpg',
   },
   {
@@ -31,7 +31,7 @@ export const artworks: Artwork[] = [
     size: 'Various',
     medium: 'Mixed Media',
     price: 'Inquire',
-    videoUrl: '/artPieces/3v.mp4',
+    videoUrl: 'https://res.cloudinary.com/der91doo8/video/upload/v1773833661/3v_blytow.mp4',
     imageUrl: '/artPieces/3.jpg',
   },
   {
@@ -42,7 +42,7 @@ export const artworks: Artwork[] = [
     size: 'Various',
     medium: 'Mixed Media',
     price: 'Inquire',
-    videoUrl: '/artPieces/4v.mp4',
+    videoUrl: 'https://res.cloudinary.com/der91doo8/video/upload/v1773833660/4v_ttjzwk.mp4',
     imageUrl: '/artPieces/4.jpg',
   },
   {
@@ -53,7 +53,7 @@ export const artworks: Artwork[] = [
     size: 'Various',
     medium: 'Mixed Media',
     price: 'Inquire',
-    videoUrl: '/artPieces/5v.mp4',
+    videoUrl: 'https://res.cloudinary.com/der91doo8/video/upload/v1773833662/5v_b2bibg.mp4',
     imageUrl: '/artPieces/5.jpg',
   },
   {
