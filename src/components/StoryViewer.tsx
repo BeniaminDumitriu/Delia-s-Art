@@ -18,7 +18,7 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
     const holdStartTimeRef = useRef<number | null>(null);
 
     const videoSrc =
-        'https://res.cloudinary.com/der91doo8/video/upload/q_auto,f_mp4/v1773832367/mobilestory2_ugczln.mov';
+        'https://res.cloudinary.com/der91doo8/video/upload/v1773833646/finalMobile_hcyetv.mov';
 
     const checkpoints: Array<{ time: number; action: 'tap' | 'hold' }> = [
         { time: 3, action: 'tap' },
