@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import type { SceneState } from '../types';
-import { TypingText } from './TypingText';
 import './StoryViewer.css';
 
 interface StoryViewerProps {
@@ -8,59 +6,65 @@ interface StoryViewerProps {
 }
 
 export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
-    const [currentScene, setCurrentScene] = useState<SceneState>('intro_1');
+    const [requiredAction, setRequiredAction] = useState<'tap' | 'hold' | 'swipe' | null>(null);
     const [canInteract, setCanInteract] = useState(false);
     const [holdProgress, setHoldProgress] = useState(0);
+    const [videoReady, setVideoReady] = useState(false);
+    const [videoError, setVideoError] = useState(false);
+    const [checkpointIndex, setCheckpointIndex] = useState(0);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const holdTimerRef = useRef<number | null>(null);
     const holdStartTimeRef = useRef<number | null>(null);
 
-    // Scene definitions matching the provided videos. Looping removed.
-    const scenes: Record<SceneState, { src: string; nextAction: 'tap' | 'swipe' | 'auto' | 'hold'; nextScene?: SceneState; mapText?: string }> = {
-        intro_1: { src: '/mobileVideos/1.mp4', nextAction: 'tap', nextScene: 'intro_2', mapText: "It all started with a dream" },
-        intro_2: { src: '/mobileVideos/2.mp4', nextAction: 'tap', nextScene: 'intro_3', mapText: "A simple piece of paper" },
-        intro_3: { src: '/mobileVideos/3.mp4', nextAction: 'hold', nextScene: 'intro_4', mapText: "And the courage to begin" },
-        intro_4: { src: '/mobileVideos/4.mp4', nextAction: 'auto', nextScene: 'intro_5', mapText: "Dreams slowly became paintings" }, // auto implies it transitions at the end
-        intro_5: { src: '/mobileVideos/5.mp4', nextAction: 'swipe', nextScene: 'gallery', mapText: "Until the dreams filled the room.." },
-        gallery: { src: '', nextAction: 'auto' }
-    };
+    const videoSrc =
+        'https://res.cloudinary.com/der91doo8/video/upload/q_auto,f_mp4/v1773832367/mobilestory2_ugczln.mov';
 
-    const handleNext = () => {
-        const sceneInfo = scenes[currentScene];
-        if (sceneInfo.nextScene) {
-            if (sceneInfo.nextScene === 'gallery') {
-                onStoryComplete();
-            } else {
-                setCurrentScene(sceneInfo.nextScene);
-            }
-        }
+    const checkpoints: Array<{ time: number; action: 'tap' | 'hold' }> = [
+        { time: 3, action: 'tap' },
+        { time: 10, action: 'tap' },
+        { time: 14, action: 'hold' },
+    ];
+
+    const resumePlayback = () => {
+        const video = videoRef.current;
+        if (!video) return;
+        setCanInteract(false);
+        setRequiredAction(null);
+        video.play().catch(() => {
+            setVideoError(true);
+        });
     };
 
     // Interaction handlers
     const handleTapOrSwipe = (type: 'tap' | 'swipe') => {
         if (!canInteract) return; // Locked until final second
-        const sceneInfo = scenes[currentScene];
-        if (sceneInfo.nextAction === type) {
-            handleNext();
+        if (requiredAction !== type) return;
+        if (type === 'swipe') onStoryComplete();
+        if (type === 'tap') {
+            setCheckpointIndex((i) => Math.min(i + 1, checkpoints.length));
+            resumePlayback();
         }
     };
 
     // Hold interaction logic
     const startHold = () => {
-        if (!canInteract || scenes[currentScene].nextAction !== 'hold') return;
+        if (!canInteract || requiredAction !== 'hold') return;
 
         holdStartTimeRef.current = Date.now();
+
+        const holdDurationMs = 1400;
 
         const updateProgress = () => {
             if (!holdStartTimeRef.current) return;
             const elapsed = Date.now() - holdStartTimeRef.current;
-            const progress = Math.min(elapsed / 3000, 1);
+            const progress = Math.min(elapsed / holdDurationMs, 1);
             setHoldProgress(progress);
 
             if (progress >= 1) {
-                handleNext();
                 cancelHold();
+                setCheckpointIndex((i) => Math.min(i + 1, checkpoints.length));
+                resumePlayback();
             } else {
                 holdTimerRef.current = requestAnimationFrame(updateProgress);
             }
@@ -112,40 +116,42 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
     useEffect(() => {
         setCanInteract(false);
         setHoldProgress(0);
+        setRequiredAction(null);
+        setCheckpointIndex(0);
+        setVideoReady(false);
+        setVideoError(false);
         cancelHold();
 
-        if (videoRef.current) {
-            videoRef.current.src = scenes[currentScene]?.src || '';
-            videoRef.current.currentTime = 0;
-            videoRef.current.play().catch(e => console.log('Autoplay prevented', e));
-        }
-    }, [currentScene]);
+        const video = videoRef.current;
+        if (!video) return;
+
+        video.currentTime = 0;
+        video.play().catch(() => {
+            setVideoError(true);
+        });
+    }, []);
 
     // Video time updates and completion logic
     const handleTimeUpdate = () => {
         if (!videoRef.current) return;
-        const { currentTime, duration } = videoRef.current;
+        const { currentTime } = videoRef.current;
 
-        // Unlock interaction in the final 1 second of the video
-        if (duration > 0 && currentTime >= duration - 1.0 && !canInteract) {
+        const next = checkpoints[checkpointIndex];
+        if (!next) return;
+
+        if (currentTime >= next.time && requiredAction === null) {
+            videoRef.current.pause();
+            setHoldProgress(0);
+            setRequiredAction(next.action);
             setCanInteract(true);
         }
     };
 
     const handleVideoEnded = () => {
+        // Final interaction is swipe up to enter gallery
+        setRequiredAction('swipe');
         setCanInteract(true);
-        const sceneInfo = scenes[currentScene];
-
-        // Auto transition handlers (e.g. video 4 -> 5)
-        if (sceneInfo.nextAction === 'auto') {
-            if (currentScene === 'intro_4') {
-                setCurrentScene('intro_5');
-            }
-        }
     };
-
-    if (currentScene === 'gallery') return null;
-    const sceneInfo = scenes[currentScene];
 
     return (
         <div
@@ -161,29 +167,45 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
             <video
                 ref={videoRef}
                 className="scene-video"
+                src={videoSrc}
                 autoPlay
                 muted
+                preload="auto"
                 playsInline
                 onTimeUpdate={handleTimeUpdate}
                 onEnded={handleVideoEnded}
+                onLoadedData={() => setVideoReady(true)}
+                onError={() => setVideoError(true)}
             />
-
-            {/* Cinematic Text Overlay */}
-            {sceneInfo.mapText && (
-                <div className="text-overlay-container">
-                    <TypingText text={sceneInfo.mapText} speed={85} className="cinematic-text" />
-                </div>
-            )}
 
             {/* UI Overlays */}
             <div className="ui-overlay">
+                {(!videoReady || videoError) && (
+                    <div className="video-loading-overlay">
+                        {!videoError ? (
+                            <div className="video-loading-text">Loading…</div>
+                        ) : (
+                            <button
+                                type="button"
+                                className="video-retry-btn"
+                                onClick={() => {
+                                    setVideoError(false);
+                                    resumePlayback();
+                                }}
+                            >
+                                Tap to start
+                            </button>
+                        )}
+                    </div>
+                )}
+
                 {/* Instructions appear only when canInteract is true */}
                 <div className={`instruction-container ${canInteract ? 'visible' : ''}`}>
-                    {sceneInfo.nextAction === 'tap' && <div className="overlay-text">Tap to continue</div>}
-                    {sceneInfo.nextAction === 'swipe' && <div className="overlay-text">Swipe up to enter gallery</div>}
-                    {sceneInfo.nextAction === 'hold' && (
+                    {requiredAction === 'tap' && <div className="overlay-text">Tap to continue</div>}
+                    {requiredAction === 'swipe' && <div className="overlay-text">Swipe up to enter gallery</div>}
+                    {requiredAction === 'hold' && (
                         <div className="overlay-text">
-                            Hold for 3 seconds
+                            Press and hold
                             <div className="hold-indicator">
                                 <div
                                     className="hold-indicator-fill"
@@ -194,7 +216,7 @@ export function StoryViewer({ onStoryComplete }: StoryViewerProps) {
                     )}
 
                     {/* Subtle hotspot for tap */}
-                    {sceneInfo.nextAction === 'tap' && (
+                    {requiredAction === 'tap' && (
                         <div className="hotspot" style={{ top: '50%', left: '50%' }}></div>
                     )}
                 </div>
