@@ -43,7 +43,7 @@ export function CollectionPage() {
       <header className="gallery-header">
         <h1>The Collection</h1>
         <p className="gallery-subtitle">Every painting carries a dream</p>
-        <p>Tap a painting to explore its story.</p>
+        <p>Atinge o pictură pentru a descoperi povestea ei.</p>
         <button 
           className="about-link-btn"
           onClick={() => navigate('/about')}

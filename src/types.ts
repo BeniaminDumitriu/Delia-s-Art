@@ -2,9 +2,14 @@ export interface Artwork {
   id: string;
   title: string;
   description: string;
-  size: string;
-  medium: string;
-  price: string;
+  /** Suport: pânză, foaie cartonată etc. */
+  supportMaterial: string;
+  /** Dimensiuni fizice ale lucrării */
+  dimensions: string;
+  /** Tip culori: acrilice, acuarelă, amestec */
+  colorType: string;
+  /** Marcă / calitate culori */
+  paintBrand: string;
   videoUrl: string;
   imageUrl: string;
 }

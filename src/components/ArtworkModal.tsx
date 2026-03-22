@@ -11,10 +11,11 @@ export function ArtworkModal({ artwork, onClose }: ArtworkModalProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [videoReady, setVideoReady] = useState(false);
 
-    const isLongDescription = artwork.description.length > 150;
+    const descThreshold = 420;
+    const isLongDescription = artwork.description.length > descThreshold;
     const displayDescription = isExpanded || !isLongDescription
         ? artwork.description
-        : `${artwork.description.slice(0, 150)}...`;
+        : `${artwork.description.slice(0, descThreshold)}…`;
 
     return (
         <div className="artwork-modal fade-transition">
@@ -51,13 +52,11 @@ export function ArtworkModal({ artwork, onClose }: ArtworkModalProps) {
                     </div>
 
                     <div className="artwork-meta">
-                        <span><strong>Size:</strong> {artwork.size}</span>
-                        <span><strong>Medium:</strong> {artwork.medium}</span>
-                        <span className="price">{artwork.price}</span>
+                        <span><strong>Suport:</strong> {artwork.supportMaterial}</span>
+                        <span><strong>Dimensiuni:</strong> {artwork.dimensions}</span>
+                        <span><strong>Tip culori:</strong> {artwork.colorType}</span>
+                        <span><strong>Culori:</strong> {artwork.paintBrand}</span>
                     </div>
-
-                    <button className="action-button primary">Purchase Artwork</button>
-                    <button className="action-button secondary">Inquire</button>
                 </div>
             </div>
         </div>

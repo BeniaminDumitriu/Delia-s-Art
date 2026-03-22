@@ -84,11 +84,12 @@ export function ProductPage() {
     );
   }
 
-  const isLongDescription = artwork.description.length > 150;
+  const descThreshold = 420;
+  const isLongDescription = artwork.description.length > descThreshold;
   const displayDescription =
     isExpanded || !isLongDescription
       ? artwork.description
-      : `${artwork.description.slice(0, 150)}...`;
+      : `${artwork.description.slice(0, descThreshold)}…`;
 
   return (
     <div className="product-page">
@@ -120,21 +121,27 @@ export function ProductPage() {
             )}
           </div>
 
-          <div className="artwork-meta" style={{ marginBottom: 34 }}>
-            <span>
-              <strong>Size:</strong> {artwork.size}
-            </span>
-            <span>
-              <strong>Medium:</strong> {artwork.medium}
-            </span>
-            <span className="price">{artwork.price}</span>
-          </div>
+          <dl className="product-specs">
+            <div className="product-specs-row">
+              <dt>Suport</dt>
+              <dd>{artwork.supportMaterial}</dd>
+            </div>
+            <div className="product-specs-row">
+              <dt>Dimensiuni</dt>
+              <dd>{artwork.dimensions}</dd>
+            </div>
+            <div className="product-specs-row">
+              <dt>Tip culori</dt>
+              <dd>{artwork.colorType}</dd>
+            </div>
+            <div className="product-specs-row product-specs-row--wide">
+              <dt>Culori</dt>
+              <dd>{artwork.paintBrand}</dd>
+            </div>
+          </dl>
 
-          <button className="action-button primary">Purchase Artwork</button>
-          <button className="action-button secondary">Inquire</button>
-          
           <div className="share-section">
-            <p style={{ fontSize: '0.9rem', color: '#999', marginBottom: '10px' }}>Share this artwork:</p>
+            <p style={{ fontSize: '0.9rem', color: '#999', marginBottom: '10px' }}>Arată-le prietenilor această pictură:</p>
             <div className="share-buttons">
               <button className="share-btn" onClick={() => handleShare('facebook')} title="Share on Facebook">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -170,7 +177,7 @@ export function ProductPage() {
       
       {relatedArtworks.length > 0 && (
         <div className="related-section">
-          <h3>You might also like</h3>
+          <h3>Poate te interesează și...</h3>
           <div className="related-grid">
             {relatedArtworks.map((art) => (
               <div 
