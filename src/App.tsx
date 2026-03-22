@@ -5,6 +5,7 @@ import { WebIntro } from './components/WebIntro';
 import { CollectionPage } from './pages/CollectionPage';
 import { ProductPage } from './pages/ProductPage';
 import { AboutPage } from './pages/AboutPage';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -28,6 +29,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/collection" replace />} />
       </Routes>
+      <Analytics />
     </>
   );
 }
