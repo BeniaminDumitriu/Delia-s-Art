@@ -1,7 +1,7 @@
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { StoryViewer } from './components/StoryViewer';
 import { WebIntro } from './components/WebIntro';
+import { MobileLogoIntro } from './components/MobileLogoIntro';
 import { CollectionPage } from './pages/CollectionPage';
 import { ProductPage } from './pages/ProductPage';
 import { AboutPage } from './pages/AboutPage';
@@ -19,7 +19,7 @@ function App() {
             isDesktop ? (
               <WebIntro onIntroComplete={() => navigate('/collection')} />
             ) : (
-              <StoryViewer onStoryComplete={() => navigate('/collection')} />
+              <MobileLogoIntro onIntroComplete={() => navigate('/collection')} />
             )
           }
         />

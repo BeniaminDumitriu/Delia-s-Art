@@ -1,0 +1,47 @@
+.mobile-logo-intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #050505;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease;
+}
+
+.mobile-logo-intro-image {
+    width: 60vw;
+    max-width: 280px;
+    height: auto;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* Phase 1: Fade in */
+.mobile-logo-intro.fade-in-1 .mobile-logo-intro-image {
+    opacity: 1;
+}
+
+/* Phase 2: Fade out */
+.mobile-logo-intro.fade-out .mobile-logo-intro-image {
+    opacity: 0;
+}
+
+/* Phase 3: Fade in again */
+.mobile-logo-intro.fade-in-2 .mobile-logo-intro-image {
+    opacity: 1;
+}
+
+/* Done: fade out the whole container */
+.mobile-logo-intro.done {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mobile-logo-intro.done .mobile-logo-intro-image {
+    opacity: 1;
+}

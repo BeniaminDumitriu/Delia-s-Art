@@ -1,8 +1,18 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { AboutVideoIntro } from '../components/AboutVideoIntro';
 import './AboutPage.css';
 
 export function AboutPage() {
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [videoComplete, setVideoComplete] = useState(false);
+
+  // On mobile, show video intro first
+  if (!isDesktop && !videoComplete) {
+    return <AboutVideoIntro onVideoComplete={() => setVideoComplete(true)} />;
+  }
 
   return (
     <div className="about-page">
@@ -90,3 +100,4 @@ export function AboutPage() {
     </div>
   );
 }
+
